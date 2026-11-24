@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { background-color: #06241b; color: #ffffff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px; }
+  .card { background-color: #0f4c3a; color: #ffffff; width: 420px; min-height: 150px; border: 2px solid #2e8b57; border-radius: 12px; padding: 20px; margin: 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+  .tag { font-size: 12px; color: #a3e4c1; text-transform: uppercase; margin-bottom: 10px; }
+  .texto { font-size: 18px; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <h2>Revisão INSS — Clique no cartão para virar</h2>
+  <div id="deck"></div>
+  <script>
+    const cards = [
+      { f: "Quais são os 3 pilares do PAS e qual exige contribuição?", v: "Previdência, Assistência e Saúde. Apenas a PREVIDÊNCIA exige contribuição." },
+      { f: "Quem compõe a gestão quadripartite da Seguridade?", v: "Trabalhadores, Empregadores, Aposentados e Governo." },
+      { f: "Qual a tríplice base de contribuição das empresas?", v: "Folha de salários, Receita/Faturamento e Lucro." },
+      { f: "Onde o dinheiro da folha de salários pode ser gasto?", v: "Exclusivamente no pagamento de benefícios do INSS (RGPS)." },
+      { f: "Qual o prazo de espera para cobrar aumento de contribuição social?", v: "90 dias (Noventena) após a publicação da lei." },
+      { f: "Pode criar benefício sem fonte de custeio?", v: "Não! Exige correspondente fonte de custeio total prévia." }
+    ];
+    const deck = document.getElementById('deck');
+    cards.forEach(c => {
+      let flipped = false;
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `<div class="tag">Frente</div><div class="texto">${c.f}</div>`;
+      div.onclick = () => {
+        flipped = !flipped;
+        div.style.backgroundColor = flipped ? '#145a45' : '#0f4c3a';
+        div.innerHTML = `<div class="tag">${flipped ? 'Resposta' : 'Frente'}</div><div class="texto">${flipped ? c.v : c.f}</div>`;
+      };
+      deck.appendChild(div);
+    });
+  </script>
+</body>
+</html>

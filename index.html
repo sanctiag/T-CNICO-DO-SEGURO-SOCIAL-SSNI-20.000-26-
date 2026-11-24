@@ -2,39 +2,60 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto INSS — Flashcards</title>
 <style>
-  body { background-color: #06241b; color: #ffffff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px; }
-  .card { background-color: #0f4c3a; color: #ffffff; width: 420px; min-height: 150px; border: 2px solid #2e8b57; border-radius: 12px; padding: 20px; margin: 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-  .tag { font-size: 12px; color: #a3e4c1; text-transform: uppercase; margin-bottom: 10px; }
-  .texto { font-size: 18px; line-height: 1.5; }
+  body { background-color: #16181d; color: #ffffff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; margin: 0; }
+  h1 { color: #7aa2f7; text-align: center; margin-bottom: 8px; font-size: 24px; }
+  p { color: #a9b1d6; text-align: center; margin-bottom: 25px; font-size: 15px; }
+  .menu { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 14px; }
+  .btn { background-color: #1b2838; color: #ffffff; text-decoration: none; padding: 18px 20px; border: 2px solid #2b4c7e; border-radius: 12px; font-size: 17px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+  .btn:hover { background-color: #23364d; border-color: #4a7ec7; }
+  .badge { background-color: #2b4c7e; color: #ffffff; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+  .locked { background-color: #1e2026; opacity: 0.55; pointer-events: none; border-color: #363a45; border-style: dashed; }
+  .locked .badge { background-color: #2c303a; color: #9aa0b0; }
 </style>
 </head>
 <body>
-  <h2>Revisão INSS — Clique no cartão para virar</h2>
-  <div id="deck"></div>
-  <script>
-    const cards = [
-      { f: "Quais são os 3 pilares do PAS e qual exige contribuição?", v: "Previdência, Assistência e Saúde. Apenas a PREVIDÊNCIA exige contribuição." },
-      { f: "Quem compõe a gestão quadripartite da Seguridade?", v: "Trabalhadores, Empregadores, Aposentados e Governo." },
-      { f: "Qual a tríplice base de contribuição das empresas?", v: "Folha de salários, Receita/Faturamento e Lucro." },
-      { f: "Onde o dinheiro da folha de salários pode ser gasto?", v: "Exclusivamente no pagamento de benefícios do INSS (RGPS)." },
-      { f: "Qual o prazo de espera para cobrar aumento de contribuição social?", v: "90 dias (Noventena) após a publicação da lei." },
-      { f: "Pode criar benefício sem fonte de custeio?", v: "Não! Exige correspondente fonte de custeio total prévia." }
-    ];
-    const deck = document.getElementById('deck');
-    cards.forEach(c => {
-      let flipped = false;
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `<div class="tag">Frente</div><div class="texto">${c.f}</div>`;
-      div.onclick = () => {
-        flipped = !flipped;
-        div.style.backgroundColor = flipped ? '#145a45' : '#0f4c3a';
-        div.innerHTML = `<div class="tag">${flipped ? 'Resposta' : 'Frente'}</div><div class="texto">${flipped ? c.v : c.f}</div>`;
-      };
-      deck.appendChild(div);
-    });
-  </script>
+  <h1>Projeto INSS — Técnico</h1>
+  <p>Selecione o módulo para revisar com flashcards</p>
+
+  <div class="menu">
+    <a href="art_194|195.html" class="btn">
+      <span>Aulas 1 a 3: Seguridade (Arts. 194 e 195)</span>
+      <span class="badge">Disponível</span>
+    </a>
+
+    <a href="aula4.html" class="btn locked">
+      <span>Aula 4: Segurados e Filiação</span>
+      <span class="badge">Em andamento</span>
+    </a>
+
+    <a href="aula5.html" class="btn locked">
+      <span>Aula 5: Dependentes e Carência</span>
+      <span class="badge">Em breve</span>
+    </a>
+  </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+____________________________________________________________________________________________________________________________________
+
 
