@@ -1,1 +1,150 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 4 — Segurados e Filiação</title>
+<style>
+  body {
+    background: linear-gradient(135deg, #1f060e 0%, #3b0b1b 100%);
+    color: #e8fff4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 15px 50px;
+    margin: 0;
+    min-height: 100vh;
+  }
+  h2 {
+    color: #7ee8b5;
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+  }
+  .sub {
+    color: #b8e6cf;
+    font-size: 15px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  #deck {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    background-color: #4a0e22;
+    color: #f0fff8;
+    width: 92%;
+    max-width: 560px; /* Aumentado em 1/3 (de 420px para 560px) */
+    min-height: 210px; /* Aumentado em 1/3+ (de 150px para 210px) */
+    border: 2px solid #36a372;
+    border-radius: 16px;
+    padding: 28px 26px;
+    margin: 14px 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: #63e6ab;
+  }
+  .tag {
+    font-size: 13px;
+    font-weight: bold;
+    color: #7ee8b5;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+  .texto {
+    font-size: 20px;
+    line-height: 1.55;
+  }
+  .btn-menu {
+    margin-top: 36px;
+    background-color: #236e4d;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 16px 34px;
+    border: 2px solid #5ce0a5;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+  .btn-menu:hover {
+    background-color: #2d8a61;
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+  <h2>Aula 4 — Segurados do INSS</h2>
+  <div class="sub">Clique no cartão para revelar a resposta</div>
+  
+  <div id="deck"></div>
+
+  <a href="index.html" class="btn-menu">← Menu Principal</a>
+
+  <script>
+    const cards = [
+      {
+        f: "Qual a diferença entre Filiação e Inscrição para o segurado obrigatório?",
+        v: "Filiação é o vínculo automático pelo início do trabalho remunerado. Inscrição é o cadastro formal no INSS (vem depois)."
+      },
+      {
+        f: "Servidor público ocupante EXCLUSIVAMENTE de cargo em comissão (sem concurso efetivo) contribui como qual segurado?",
+        v: "Segurado obrigatório na categoria de EMPREGADO (no RGPS/INSS)."
+      },
+      {
+        f: "Quantos dias por semana caracterizam o Empregado Doméstico? E se trabalhar até 2 dias?",
+        v: "MAIS de 2 dias por semana (3 ou mais) + finalidade não lucrativa. Até 2 dias = diarista (Contribuinte Individual)."
+      },
+      {
+        f: "Quem é o Contribuinte Individual? Cite 3 exemplos clássicos de prova.",
+        v: "Quem trabalha por conta própria (sem subordinação). Exemplos: MEI, padre/pastor, sócio com pró-labore e autônomos."
+      },
+      {
+        f: "Qual a principal característica do Trabalhador Avulso?",
+        v: "Presta serviços a várias empresas SEM vínculo empregatício, mas com intermediação OBRIGATÓRIA de Sindicato ou OGMO."
+      },
+      {
+        f: "Quem é o Segurado Especial e qual o limite para contratar temporários na safra?",
+        v: "Produtor rural ou pescador artesanal em regime de economia familiar (sem empregados permanentes). Temporários: até 120 dias/ano."
+      },
+      {
+        f: "Qual a idade mínima do Segurado Facultativo e quando ocorre sua filiação?",
+        v: "A partir de 16 anos (sem renda própria, ex: estudante, dona de casa). A filiação só ocorre com inscrição + 1º pagamento em dia."
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    cards.forEach(c => {
+      let flipped = false;
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `<div class="tag">Frente</div><div class="texto">${c.f}</div>`;
+      div.onclick = () => {
+        flipped = !flipped;
+        div.style.backgroundColor = flipped ? '#330816' : '#4a0e22';
+        div.style.borderColor = flipped ? '#63e6ab' : '#36a372';
+        div.innerHTML = `<div class="tag">${flipped ? 'Resposta' : 'Frente'}</div><div class="texto">${flipped ? c.v : c.f}</div>`;
+      };
+      deck.appendChild(div);
+    });
+  </script>
+</body>
+</html>
