@@ -327,6 +327,13 @@
         f: "Se uma família contrata uma cozinheira para trabalhar 5 dias por semana fazendo marmitas para vender na rua, ela é Doméstica?",
         v: "<strong>NÃO!</strong> Como há <strong>finalidade lucrativa</strong>, ela deixa de ser doméstica e vira <strong>Empregada comum</strong>."
       },
+            {
+        id: 3,
+        cat: "domestico",
+        titulo: "2. Empregado Doméstico (Obrigatório)",
+        f: "Se uma família contrata uma cozinheira para trabalhar 5 dias por semana fazendo marmitas para vender na rua, ela é Doméstica?",
+        v: "<strong>NÃO!</strong> Como há <strong>finalidade lucrativa</strong>, ela deixa de ser doméstica e vira <strong>Empregada comum</strong>."
+      },
       {
         id: 4,
         cat: "individual",
@@ -352,3 +359,99 @@
         id: 7,
         cat: "especial",
         titulo: "5. Segurado Especial (Obrigatório)",
+        f: "Quem é o Segurado Especial e quais são seus dois limites numéricos (terra e temporários)?",
+        v: "Produtor rural, pescador artesanal ou extrativista em <strong>economia familiar</strong> (sem empregado fixo).<span class='pegadinha'>⚡ Terra: até 4 módulos fiscais (não vale p/ pescador). Temporários: até 120 dias/ano.</span>"
+      },
+      {
+        id: 8,
+        cat: "especial",
+        titulo: "5. Segurado Especial (Obrigatório)",
+        f: "O Segurado Especial precisa pagar carnê todo mês? E se não vender nada no ano?",
+        v: "<strong>NÃO paga carnê mensal!</strong> Contribui com <strong>1,3% apenas sobre a venda</strong> da produção. Se produzir só para consumo próprio, não paga nada e mantém direitos de 1 salário mínimo.<span class='pegadinha'>⚡ Mesmo sem pagar nada, ele É segurado obrigatório!</span>"
+      },
+      {
+        id: 9,
+        cat: "facultativo",
+        titulo: "6. Segurado Facultativo (Não Obrigatório)",
+        f: "Qual a idade mínima do Segurado Facultativo e cite 4 exemplos clássicos.",
+        v: "<strong>16 anos ou mais</strong>, sem exercer atividade remunerada: <strong>estudante, dona de casa, estagiário (Lei do Estágio) e síndico sem remuneração/isenção.</strong>"
+      },
+      {
+        id: 10,
+        cat: "facultativo",
+        titulo: "6. Segurado Facultativo (Não Obrigatório)",
+        f: "Como ocorre a filiação do Segurado Facultativo? Ele pode pagar meses atrasados antes da inscrição?",
+        v: "Filiação só ocorre após <strong>inscrição + pagamento da 1ª parcela em dia</strong>.<span class='pegadinha'>⚡ Nunca pode pagar período anterior à primeira contribuição em dia.</span>"
+      },
+      {
+        id: 11,
+        cat: "facultativo",
+        titulo: "6. Segurado Facultativo (Não Obrigatório)",
+        f: "Um servidor público já aposentado pelo regime próprio (RPPS) pode se filiar como Segurado Facultativo no INSS?",
+        v: "<strong>PROIBIDO!</strong> Quem participa ou já é aposentado por regime próprio de previdência não pode ser facultativo no INSS."
+      }
+    ];
+
+    const deck = document.getElementById("deck");
+    const filterBar = document.getElementById("filterBar");
+    const themeBar = document.getElementById("themeBar");
+    const estadoVirado = {};
+
+    function renderizarCards(filtro) {
+      deck.innerHTML = "";
+      const lista = filtro === "todos" 
+        ? cardsData 
+        : cardsData.filter(item => item.cat === filtro);
+
+      lista.forEach(item => {
+        const isFlipped = !!estadoVirado[item.id];
+        const cardEl = document.createElement("div");
+        cardEl.className = isFlipped ? "flashcard flipped" : "flashcard";
+        cardEl.setAttribute("data-id", item.id);
+
+        cardEl.innerHTML = `
+          <div class="card-top">
+            <span class="cat-label">${item.titulo}</span>
+            <span class="side-label ${isFlipped ? "side-back" : "side-front"}">
+              ${isFlipped ? "Resposta" : "Pergunta"}
+            </span>
+          </div>
+          <div class="card-content">${isFlipped ? item.v : item.f}</div>
+          <div class="card-hint">Toque no cartão para ${isFlipped ? "voltar à pergunta" : "revelar a resposta"}</div>
+        `;
+
+        deck.appendChild(cardEl);
+      });
+    }
+
+    deck.addEventListener("click", function(e) {
+      const cardEl = e.target.closest(".flashcard");
+      if (!cardEl) return;
+      const id = cardEl.getAttribute("data-id");
+      estadoVirado[id] = !estadoVirado[id];
+      const filtroAtivo = filterBar.querySelector(".active").getAttribute("data-filter");
+      renderizarCards(filtroAtivo);
+    });
+
+    filterBar.addEventListener("click", function(e) {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+      filterBar.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderizarCards(btn.getAttribute("data-filter"));
+    });
+
+    themeBar.addEventListener("click", function(e) {
+      const btn = e.target.closest(".theme-btn");
+      if (!btn) return;
+      themeBar.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.documentElement.setAttribute("data-theme", btn.getAttribute("data-set-theme"));
+    });
+
+    renderizarCards("todos");
+  });
+</script>
+
+</body>
+</html>
