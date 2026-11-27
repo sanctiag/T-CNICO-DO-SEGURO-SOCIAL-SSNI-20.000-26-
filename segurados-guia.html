@@ -1,62 +1,92 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mapa Completo: Segurados do INSS</title>
+<title>Guia Visual: Segurados do INSS (Foco TDAH)</title>
 <style>
-  :root {
-    --bg-main: #0b1f1c;       /* Verde-petróleo profundo: reduz hiperestimulação */
-    --bg-card: #132e2a;       /* Ardósia escura: separa blocos sem brilho agressivo */
-    --bg-pill: #1b3f3a;       /* Fundo suave para destaques internos */
-    --text-main: #f2f5f3;     /* Off-white/creme: conforto visual prolongado */
-    --text-muted: #a7c4be;    /* Texto secundário suave */
-    --accent-mint: #6ee7b7;   /* Verde menta: foco e estrutura */
-    --accent-amber: #f4b860;  /* Âmbar suave: alerta para pegadinhas de prova */
-    --border-color: #26544d;
+  :root, [data-theme="petroleo"] {
+    --bg-main: #0f171a;
+    --bg-card: #182529;
+    --bg-pill: #203136;
+    --text-main: #eef2f3;
+    --text-muted: #9eb0b5;
+    --accent: #74c0fc;
+    --alert: #ffd43b;
+    --border: #2c4047;
   }
 
-  * {
-    box-sizing: border-box;
+  [data-theme="ardosia"] {
+    --bg-main: #18191c;
+    --bg-card: #24262b;
+    --bg-pill: #2e3138;
+    --text-main: #f1f3f5;
+    --text-muted: #adb5bd;
+    --accent: #a5d8ff;
+    --alert: #ffe066;
+    --border: #3b3f47;
   }
+
+  [data-theme="areia"] {
+    --bg-main: #23201d;
+    --bg-card: #302c28;
+    --bg-pill: #3d3833;
+    --text-main: #f5f0eb;
+    --text-muted: #c2b8ae;
+    --accent: #8ce99a;
+    --alert: #ffc078;
+    --border: #4f4841;
+  }
+
+  * { box-sizing: border-box; }
 
   body {
     background-color: var(--bg-main);
     color: var(--text-main);
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     margin: 0;
-    padding: 28px 16px 60px;
+    padding: 24px 16px 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     line-height: 1.6;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
-  .container {
-    width: 100%;
-    max-width: 720px;
+  .container { width: 100%; max-width: 720px; }
+
+  .theme-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 24px;
+  .theme-label { font-size: 13px; color: var(--text-muted); margin-right: 4px; }
+
+  .theme-btn {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1.5px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
   }
 
-  h1 {
-    color: var(--accent-mint);
-    font-size: 25px;
-    margin: 0 0 8px;
-    letter-spacing: 0.3px;
+  .theme-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background-color: var(--bg-pill);
   }
 
-  .subtitle {
-    color: var(--text-muted);
-    font-size: 15px;
-    margin: 0;
-  }
+  header { text-align: center; margin-bottom: 22px; }
+  h1 { color: var(--accent); font-size: 25px; margin: 0 0 8px; }
+  .subtitle { color: var(--text-muted); font-size: 15px; margin: 0; }
 
-  /* Barra de filtros para estudar 1 por vez (ideal para TDAH) */
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -68,29 +98,28 @@
   .filter-btn {
     background-color: var(--bg-card);
     color: var(--text-main);
-    border: 1.5px solid var(--border-color);
+    border: 1.5px solid var(--border);
     padding: 9px 14px;
     border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s ease;
   }
 
-  .filter-btn:hover, .filter-btn.active {
-    background-color: var(--accent-mint);
-    color: #071714;
-    border-color: var(--accent-mint);
+  .filter-btn:hover { border-color: var(--accent); }
+  .filter-btn.active {
+    background-color: var(--accent);
+    color: #0b1317;
+    border-color: var(--accent);
   }
 
-  /* Cartões de Conteúdo */
   .segurado-card {
     background-color: var(--bg-card);
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--border);
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 20px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   }
 
   .card-header {
@@ -99,38 +128,31 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    border-bottom: 1.5px solid var(--border-color);
+    border-bottom: 1.5px solid var(--border);
     padding-bottom: 12px;
     margin-bottom: 16px;
   }
 
-  .card-title {
-    font-size: 21px;
+  .card-title { font-size: 21px; font-weight: bold; color: var(--accent); margin: 0; }
+
+  .badge-obg, .badge-fac {
+    font-size: 12px;
     font-weight: bold;
-    color: var(--accent-mint);
-    margin: 0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
   }
 
   .badge-obg {
-    background-color: #1c4d3e;
-    color: var(--accent-mint);
-    border: 1px solid var(--accent-mint);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
+    background-color: rgba(116, 192, 252, 0.15);
+    color: var(--accent);
+    border: 1px solid var(--accent);
   }
 
   .badge-fac {
-    background-color: #4a3519;
-    color: var(--accent-amber);
-    border: 1px solid var(--accent-amber);
-    font-size: 12px;
-    font-weight: bold;
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
+    background-color: rgba(255, 212, 59, 0.15);
+    color: var(--alert);
+    border: 1px solid var(--alert);
   }
 
   .section-label {
@@ -142,23 +164,13 @@
     margin: 14px 0 6px;
   }
 
-  ul {
-    margin: 0;
-    padding-left: 20px;
-  }
-
-  li {
-    margin-bottom: 8px;
-    font-size: 16px;
-  }
-
-  strong {
-    color: #ffffff;
-  }
+  ul { margin: 0; padding-left: 20px; }
+  li { margin-bottom: 8px; font-size: 16px; }
+  strong { color: #ffffff; }
 
   .alerta-box {
     background-color: var(--bg-pill);
-    border-left: 4px solid var(--accent-amber);
+    border-left: 4px solid var(--alert);
     padding: 12px 16px;
     border-radius: 8px;
     margin-top: 16px;
@@ -166,7 +178,7 @@
   }
 
   .alerta-title {
-    color: var(--accent-amber);
+    color: var(--alert);
     font-weight: bold;
     display: block;
     margin-bottom: 4px;
@@ -184,41 +196,46 @@
 
   .btn-nav {
     background-color: var(--bg-card);
-    color: var(--accent-mint);
+    color: var(--accent);
     text-decoration: none;
     padding: 15px 28px;
-    border: 2px solid var(--accent-mint);
+    border: 2px solid var(--accent);
     border-radius: 12px;
     font-size: 16px;
     font-weight: bold;
-    transition: 0.2s;
   }
 
   .btn-nav:hover {
-    background-color: var(--accent-mint);
-    color: #071714;
+    background-color: var(--accent);
+    color: #0b1317;
   }
 </style>
 </head>
 <body>
 
 <div class="container">
+  <div class="theme-bar" id="themeBar">
+    <span class="theme-label">Tom neutro:</span>
+    <button type="button" class="theme-btn active" data-set-theme="petroleo">Ardósia Azulada</button>
+    <button type="button" class="theme-btn" data-set-theme="ardosia">Grafite Neutro</button>
+    <button type="button" class="theme-btn" data-set-theme="areia">Café / Areia Escura</button>
+  </div>
+
   <header>
     <h1>Segurados do INSS — Guia Visual</h1>
     <p class="subtitle">Filtre um card por vez para manter o foco total sem sobrecarga</p>
   </header>
 
-  <div class="filters">
-    <button class="filter-btn active" onclick="filtrar('todos', this)">Mostrar Todos (6)</button>
-    <button class="filter-btn" onclick="filtrar('empregado', this)">1. Empregado</button>
-    <button class="filter-btn" onclick="filtrar('domestico', this)">2. Doméstico</button>
-    <button class="filter-btn" onclick="filtrar('individual', this)">3. Cont. Individual</button>
-    <button class="filter-btn" onclick="filtrar('avulso', this)">4. Avulso</button>
-    <button class="filter-btn" onclick="filtrar('especial', this)">5. Especial</button>
-    <button class="filter-btn" onclick="filtrar('facultativo', this)">6. Facultativo</button>
+  <div class="filters" id="filterBar">
+    <button type="button" class="filter-btn active" data-filter="todos">Mostrar Todos (6)</button>
+    <button type="button" class="filter-btn" data-filter="empregado">1. Empregado</button>
+    <button type="button" class="filter-btn" data-filter="domestico">2. Doméstico</button>
+    <button type="button" class="filter-btn" data-filter="individual">3. Cont. Individual</button>
+    <button type="button" class="filter-btn" data-filter="avulso">4. Avulso</button>
+    <button type="button" class="filter-btn" data-filter="especial">5. Especial</button>
+    <button type="button" class="filter-btn" data-filter="facultativo">6. Facultativo</button>
   </div>
 
-  <!-- 1. EMPREGADO -->
   <article class="segurado-card" data-cat="empregado">
     <div class="card-header">
       <h2 class="card-title">1. Empregado</h2>
@@ -240,7 +257,6 @@
     </div>
   </article>
 
-  <!-- 2. EMPREGADO DOMÉSTICO -->
   <article class="segurado-card" data-cat="domestico">
     <div class="card-header">
       <h2 class="card-title">2. Empregado Doméstico</h2>
@@ -261,8 +277,6 @@
       Se a família usar a cozinheira para vender marmitas fora (gerar lucro) = vira <strong>Empregada comum</strong>.
     </div>
   </article>
-
-  <!-- 3. CONTRIBUINTE INDIVIDUAL -->
   <article class="segurado-card" data-cat="individual">
     <div class="card-header">
       <h2 class="card-title">3. Contribuinte Individual</h2>
@@ -285,7 +299,6 @@
     </div>
   </article>
 
-  <!-- 4. TRABALHADOR AVULSO -->
   <article class="segurado-card" data-cat="avulso">
     <div class="card-header">
       <h2 class="card-title">4. Trabalhador Avulso</h2>
@@ -298,3 +311,89 @@
     <div class="section-label">Particularidades que caem na prova</div>
     <ul>
       <li><strong>Intermediação Obrigatória:</strong> A contratação e o pagamento passam obrigatoriamente por um <strong>Sindicato da categoria</strong> ou pelo <strong>OGMO</strong> (Órgão Gestor de Mão de Obra).</li>
+      <li><strong>Exemplos clássicos:</strong> Estivador, conferente de carga, amarrador de navios nos portos e ensacador de café/cacau.</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      Se o trabalhador prestar serviço eventual direto para uma empresa <strong>sem passar por Sindicato ou OGMO</strong>, ele não é Avulso — é <strong>Contribuinte Individual</strong>.
+    </div>
+  </article>
+
+  <article class="segurado-card" data-cat="especial">
+    <div class="card-header">
+      <h2 class="card-title">5. Segurado Especial</h2>
+      <span class="badge-obg">Segurado Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Produtor rural (proprietário, parceiro, meeiro, arrendatário), <strong>pescador artesanal</strong> ou <strong>extrativista vegetal</strong> que trabalha <strong>individualmente ou em regime de economia familiar</strong>, sem empregados permanentes.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Limite de terra:</strong> Até <strong>4 módulos fiscais</strong> (não se aplica ao pescador artesanal nem ao extrativista).</li>
+      <li><strong>Mão de obra temporária:</strong> Pode contratar ajuda temporária (ex: época de safra) por no máximo <strong>120 dias no ano civil</strong>.</li>
+      <li><strong>Como paga:</strong> Não paga carnê mensal! Contribui com <strong>1,3% apenas quando vende</strong> sua produção rural. Se produzir só para comer em casa, não paga nada e mantém todos os direitos básicos (1 salário mínimo).</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      O Segurado Especial <strong>É segurado obrigatório</strong> (filiação automática), mesmo que passe o ano inteiro sem vender produção e sem pagar nenhum centavo!
+    </div>
+  </article>
+
+  <article class="segurado-card" data-cat="facultativo">
+    <div class="card-header">
+      <h2 class="card-title">6. Segurado Facultativo</h2>
+      <span class="badge-fac">Não Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Pessoa maior de <strong>16 anos</strong> que <strong>não exerce atividade remunerada</strong>, mas escolhe contribuir por conta própria para ter proteção do INSS.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Exemplos clássicos:</strong> Estudante (16+ anos), dona de casa, estagiário (Lei do Estágio), bolsista em dedicação exclusiva e presidiário que não trabalha remuneradamente.</li>
+      <li><strong>Síndico não remunerado:</strong> Aquele que não recebe salário nem tem isenção da taxa de condomínio.</li>
+      <li><strong>Filiação diferente:</strong> Só se filia após a <strong>inscrição + pagamento da 1ª parcela em dia</strong> (nunca retroativo).</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      Quem já é aposentado por regime próprio (ex: servidor público aposentado) <strong>é proibido</strong> de se filiar como segurado facultativo do INSS.
+    </div>
+  </article>
+
+  <div class="footer-nav">
+    <a href="index.html" class="btn-nav">← Menu Principal</a>
+    <a href="segurados-detalhes.html" class="btn-nav">Ir para Flashcards →</a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const filterBar = document.getElementById("filterBar");
+    const themeBar = document.getElementById("themeBar");
+
+    filterBar.addEventListener("click", function(e) {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+      filterBar.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const categoria = btn.getAttribute("data-filter");
+      document.querySelectorAll(".segurado-card").forEach(card => {
+        card.style.display = (categoria === "todos" || card.dataset.cat === categoria) ? "block" : "none";
+      });
+    });
+
+    themeBar.addEventListener("click", function(e) {
+      const btn = e.target.closest(".theme-btn");
+      if (!btn) return;
+      themeBar.querySelectorAll(".theme-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.documentElement.setAttribute("data-theme", btn.getAttribute("data-set-theme"));
+    });
+  });
+</script>
+
+</body>
+</html>
+
