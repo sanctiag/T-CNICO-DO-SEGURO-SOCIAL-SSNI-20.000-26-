@@ -1,1 +1,300 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa Completo: Segurados do INSS</title>
+<style>
+  :root {
+    --bg-main: #0b1f1c;       /* Verde-petróleo profundo: reduz hiperestimulação */
+    --bg-card: #132e2a;       /* Ardósia escura: separa blocos sem brilho agressivo */
+    --bg-pill: #1b3f3a;       /* Fundo suave para destaques internos */
+    --text-main: #f2f5f3;     /* Off-white/creme: conforto visual prolongado */
+    --text-muted: #a7c4be;    /* Texto secundário suave */
+    --accent-mint: #6ee7b7;   /* Verde menta: foco e estrutura */
+    --accent-amber: #f4b860;  /* Âmbar suave: alerta para pegadinhas de prova */
+    --border-color: #26544d;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 28px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.6;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    color: var(--accent-mint);
+    font-size: 25px;
+    margin: 0 0 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* Barra de filtros para estudar 1 por vez (ideal para TDAH) */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+
+  .filter-btn {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1.5px solid var(--border-color);
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background-color: var(--accent-mint);
+    color: #071714;
+    border-color: var(--accent-mint);
+  }
+
+  /* Cartões de Conteúdo */
+  .segurado-card {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: 1.5px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: var(--accent-mint);
+    margin: 0;
+  }
+
+  .badge-obg {
+    background-color: #1c4d3e;
+    color: var(--accent-mint);
+    border: 1px solid var(--accent-mint);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .badge-fac {
+    background-color: #4a3519;
+    color: var(--accent-amber);
+    border: 1px solid var(--accent-amber);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .section-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    font-weight: bold;
+    margin: 14px 0 6px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  strong {
+    color: #ffffff;
+  }
+
+  .alerta-box {
+    background-color: var(--bg-pill);
+    border-left: 4px solid var(--accent-amber);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 15px;
+  }
+
+  .alerta-title {
+    color: var(--accent-amber);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  .btn-nav {
+    background-color: var(--bg-card);
+    color: var(--accent-mint);
+    text-decoration: none;
+    padding: 15px 28px;
+    border: 2px solid var(--accent-mint);
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.2s;
+  }
+
+  .btn-nav:hover {
+    background-color: var(--accent-mint);
+    color: #071714;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Segurados do INSS — Guia Visual</h1>
+    <p class="subtitle">Filtre um card por vez para manter o foco total sem sobrecarga</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filtrar('todos', this)">Mostrar Todos (6)</button>
+    <button class="filter-btn" onclick="filtrar('empregado', this)">1. Empregado</button>
+    <button class="filter-btn" onclick="filtrar('domestico', this)">2. Doméstico</button>
+    <button class="filter-btn" onclick="filtrar('individual', this)">3. Cont. Individual</button>
+    <button class="filter-btn" onclick="filtrar('avulso', this)">4. Avulso</button>
+    <button class="filter-btn" onclick="filtrar('especial', this)">5. Especial</button>
+    <button class="filter-btn" onclick="filtrar('facultativo', this)">6. Facultativo</button>
+  </div>
+
+  <!-- 1. EMPREGADO -->
+  <article class="segurado-card" data-cat="empregado">
+    <div class="card-header">
+      <h2 class="card-title">1. Empregado</h2>
+      <span class="badge-obg">Segurado Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Trabalha com <strong>subordinação</strong>, <strong>habitualidade</strong>, <strong>pessoalidade</strong> e <strong>salário</strong> (urbano ou rural), com ou sem carteira assinada.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Cargo em comissão puro:</strong> Servidor público sem concurso efetivo (apenas cargo de confiança) e servidor temporário são <strong>Empregados</strong> no INSS.</li>
+      <li><strong>Diretor empregado:</strong> Aquele que participa da diretoria, mas pode ser demitido (mantém subordinação).</li>
+      <li><strong>Trabalho no exterior:</strong> Brasileiro ou estrangeiro contratado no Brasil para trabalhar em filial/agência de empresa nacional fora do país.</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      A filiação ocorre <strong>automaticamente</strong> no primeiro dia de trabalho, mesmo que o patrão não assine a carteira nem recolha o INSS.
+    </div>
+  </article>
+
+  <!-- 2. EMPREGADO DOMÉSTICO -->
+  <article class="segurado-card" data-cat="domestico">
+    <div class="card-header">
+      <h2 class="card-title">2. Empregado Doméstico</h2>
+      <span class="badge-obg">Segurado Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Presta serviços de natureza <strong>contínua</strong> no âmbito residencial de pessoa ou família, <strong>sem finalidade lucrativa</strong>.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Regra dos dias:</strong> Precisa trabalhar <strong>MAIS de 2 dias por semana</strong> (3, 4, 5 ou 6 dias).</li>
+      <li><strong>Exemplos clássicos:</strong> Babá, motorista particular, jardineiro residencial, caseiro de sítio de lazer e cuidador de idosos da família.</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      Se trabalhar <strong>até 2 dias por semana</strong> (diarista) = <strong>Contribuinte Individual</strong>.<br>
+      Se a família usar a cozinheira para vender marmitas fora (gerar lucro) = vira <strong>Empregada comum</strong>.
+    </div>
+  </article>
+
+  <!-- 3. CONTRIBUINTE INDIVIDUAL -->
+  <article class="segurado-card" data-cat="individual">
+    <div class="card-header">
+      <h2 class="card-title">3. Contribuinte Individual</h2>
+      <span class="badge-obg">Segurado Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Trabalha <strong>por conta própria</strong> (autônomo) ou presta serviços eventuais a empresas, <strong>sem vínculo de emprego</strong> e sem subordinação.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Autônomos e MEI:</strong> Eletricista, pintor, motorista de aplicativo, taxista e Microempreendedor Individual (MEI).</li>
+      <li><strong>Religiosos:</strong> Ministro de confissão religiosa (padre, pastor, rabino) — mesmo que receba apenas ajuda de custo/sustento.</li>
+      <li><strong>Sócios e Diretores:</strong> Sócio administrador, titular de firma individual e diretor <strong>não empregado</strong> que recebam remuneração (pró-labore).</li>
+      <li><strong>Síndico remunerado:</strong> Aquele que recebe salário ou ganha <strong>isenção da taxa de condomínio</strong>.</li>
+    </ul>
+    <div class="alerta-box">
+      <span class="alerta-title">⚡ Pegadinha Cebraspe</span>
+      Síndico que <strong>não paga condomínio</strong> (isenção) é considerado remunerado e entra como <strong>Contribuinte Individual</strong> obrigatório!
+    </div>
+  </article>
+
+  <!-- 4. TRABALHADOR AVULSO -->
+  <article class="segurado-card" data-cat="avulso">
+    <div class="card-header">
+      <h2 class="card-title">4. Trabalhador Avulso</h2>
+      <span class="badge-obg">Segurado Obrigatório</span>
+    </div>
+    <div class="section-label">Regra Geral</div>
+    <ul>
+      <li>Presta serviços de natureza urbana ou rural a diversas empresas, <strong>sem vínculo empregatício</strong> com nenhuma delas.</li>
+    </ul>
+    <div class="section-label">Particularidades que caem na prova</div>
+    <ul>
+      <li><strong>Intermediação Obrigatória:</strong> A contratação e o pagamento passam obrigatoriamente por um <strong>Sindicato da categoria</strong> ou pelo <strong>OGMO</strong> (Órgão Gestor de Mão de Obra).</li>
