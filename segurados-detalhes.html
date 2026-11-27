@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards: Particularidades dos Segurados</title>
+<style>
+  :root {
+    --bg-main: #0b1f1c;       /* Verde-petróleo profundo: reduz hiperestimulação */
+    --bg-card: #132e2a;       /* Ardósia escura: frente do cartão */
+    --bg-card-back: #183a35;  /* Tom levemente diferente ao virar para resposta */
+    --text-main: #f2f5f3;     /* Creme suave: conforto visual */
+    --text-muted: #a7c4be;    /* Texto secundário */
+    --accent-mint: #6ee7b7;   /* Verde menta: foco e bordas */
+    --accent-amber: #f4b860;  /* Âmbar: alerta de pegadinhas */
+    --border-color: #26544d;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 28px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.55;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    color: var(--accent-mint);
+    font-size: 24px;
+    margin: 0 0 6px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 0;
+  }
+
+  /* Barra de filtros por segurado (1 por vez para TDAH) */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+
+  .filter-btn {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1.5px solid var(--border-color);
+    padding: 8px 13px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background-color: var(--accent-mint);
+    color: #071714;
+    border-color: var(--accent-mint);
+  }
+
+  #deck {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Estilo Flashcard Clicável */
+  .flashcard {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 26px 24px;
+    min-height: 210px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .flashcard:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-mint);
+  }
+
+  .flashcard.flipped {
+    background-color: var(--bg-card-back);
+    border-color: var(--accent-amber);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+  }
+
+  .cat-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--accent-mint);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .side-label {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+  }
+
+  .side-front {
+    background-color: #1c4d3e;
+    color: var(--accent-mint);
+  }
+
+  .side-back {
+    background-color: #4a3519;
+    color: var(--accent-amber);
+  }
+
+  .card-content {
+    font-size: 18px;
+    text-align: center;
+    margin: auto 0;
+  }
+
+  .card-content strong {
+    color: #ffffff;
+  }
+
+  .pegadinha {
+    display: block;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color);
+    color: var(--accent-amber);
+    font-size: 15px;
+  }
+
+  .card-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 14px;
+  }
+
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 34px;
+  }
+
+  .btn-nav {
+    background-color: var(--bg-card);
+    color: var(--accent-mint);
+    text-decoration: none;
+    padding: 15px 28px;
+    border: 2px solid var(--accent-mint);
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.2s;
+  }
+
+  .btn-nav:hover {
+    background-color: var(--accent-mint);
+    color: #071714;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Segurados do INSS — Flashcards</h1>
+    <p class="subtitle">Filtre um segurado por vez e clique no cartão para testar a memória</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filtrar('todos', this)">Todos (12)</button>
+    <button class="filter-btn" onclick="filtrar('empregado', this)">1. Empregado</button>
+    <button class="filter-btn" onclick="filtrar('domestico', this)">2. Doméstico</button>
+    <button class="filter-btn" onclick="filtrar('individual', this)">3. Cont. Individual</button>
+    <button class="filter-btn" onclick="filtrar('avulso', this)">4. Avulso</button>
+    <button class="filter-btn" onclick="filtrar('especial', this)">5. Especial</button>
+    <button class="filter-btn" onclick="filtrar('facultativo', this)">6. Facultativo</button>
+  </div>
+
+  <div id="deck"></div>
+
+  <div class="footer-nav">
+    <a href="index.html" class="btn-nav">← Menu Principal</a>
+    <a href="aula4.html" class="btn-nav">Flashcards Aula 4 →</a>
+  </div>
+</div>
+
+<script>
+  const cards = [
+    // 1. EMPREGADO
+    {
+      cat: "empregado",
+      titulo: "1. Empregado (Obrigatório)",
+      f: "Quais são os 4 requisitos do Empregado comum e quando nasce sua filiação?",
+      v: "<strong>Subordinação, habitualidade, pessoalidade e salário.</strong><span class='pegadinha'>⚡ Filiação é AUTOMÁTICA no 1º dia de trabalho, mesmo sem carteira assinada.</span>"
+    },
+    {
+      cat: "empregado",
+      titulo: "1. Empregado (Obrigatório)",
+      f: "Servidor com cargo em comissão puro (sem concurso), diretor empregado e contratado no Brasil para filial no exterior entram em qual categoria?",
+      v: "Todos são segurados obrigatórios na categoria de <strong>EMPREGADO</strong> (no INSS/RGPS).<span class='pegadinha'>⚡ Diretor só é Empregado se puder ser demitido (subordinação).</span>"
+    },
+
+    // 2. DOMÉSTICO
+    {
+      cat: "domestico",
+      titulo: "2. Empregado Doméstico (Obrigatório)",
+      f: "Qual a regra dos dias por semana e da finalidade para caracterizar o Empregado Doméstico?",
+      v: "Trabalhar <strong>MAIS de 2 dias por semana</strong> (3 ou mais) em residência, <strong>SEM finalidade lucrativa</strong>.<span class='pegadinha'>⚡ Até 2 dias/semana = Diarista (Contribuinte Individual).</span>"
+    },
+    {
+      cat: "domestico",
+      titulo: "2. Empregado Doméstico (Obrigatório)",
+      f: "Se uma família contrata uma cozinheira para trabalhar 5 dias por semana fazendo marmitas para vender na rua, ela é Doméstica?",
+      v: "<strong>NÃO!</strong> Como há <strong>finalidade lucrativa</strong>, ela deixa de ser doméstica e vira <strong>Empregada comum</strong>."
+    },
+
+    // 3. CONTRIBUINTE INDIVIDUAL
+    {
+      cat: "individual",
+      titulo: "3. Contribuinte Individual (Obrigatório)",
+      f: "Quem é o Contribuinte Individual? Cite 4 exemplos clássicos cobrados pelo Cebraspe.",
+      v: "Quem trabalha <strong>por conta própria</strong> (sem subordinação): <strong>MEI, motorista de app, padre/pastor e sócio com pró-labore.</strong>"
+    },
+    {
+      cat: "individual",
+      titulo: "3. Contribuinte Individual (Obrigatório)",
+      f: "O síndico de condomínio que NÃO recebe salário, mas ganha isenção da taxa de condomínio, é Facultativo?",
+      v: "<strong>NÃO!</strong> A isenção da taxa funciona como remuneração indireta. Ele é <strong>Contribuinte Individual obrigatório</strong>."
+    },
+
+    // 4. AVULSO
+    {
+      cat: "avulso",
+      titulo: "4. Trabalhador Avulso (Obrigatório)",
+      f: "O que diferencia o Trabalhador Avulso (ex: estivador) de um autônomo comum?",
+      v: "Presta serviços a várias empresas <strong>SEM vínculo de emprego</strong>, mas com <strong>intermediação OBRIGATÓRIA de Sindicato ou OGMO</strong>.<span class='pegadinha'>⚡ Sem Sindicato ou OGMO = vira Contribuinte Individual.</span>"
+    },
+
+    // 5. ESPECIAL
+    {
+      cat: "especial",
+      titulo: "5. Segurado Especial (Obrigatório)",
+      f: "Quem é o Segurado Especial e quais são seus dois limites numéricos (terra e temporários)?",
+      v: "Produtor rural, pescador artesanal ou extrativista em <strong>economia familiar</strong> (sem empregado fixo).<span class='pegadinha'>⚡ Terra: até 4 módulos fiscais (não vale p/ pescador). Temporários: até 120 dias/ano.</span>"
+    },
+    {
+      cat: "especial",
+      titulo: "5. Segurado Especial (Obrigatório)",
+      f: "O Segurado Especial precisa pagar carnê todo mês? E se não vender nada no ano?",
+      v: "<strong>NÃO paga carnê mensal!</strong> Contribui com <strong>1,3% apenas sobre a venda</strong> da produção. Se produzir só para consumo próprio, não paga nada e mantém direitos de 1 salário mínimo.<span class='pegadinha'>⚡ Mesmo sem pagar nada, ele É segurado obrigatório!</span>"
+    },
+
+    // 6. FACULTATIVO
+    {
+      cat: "facultativo",
+      titulo: "6. Segurado Facultativo (Não Obrigatório)",
+      f: "Qual a idade mínima do Segurado Facultativo e cite 4 exemplos clássicos.",
+      v: "<strong>16 anos ou mais</strong>, sem exercer atividade remunerada: <strong>estudante, dona de casa, estagiário (Lei do Estágio) e síndico sem remuneração/isenção.</strong>"
+    },
+    {
+      cat: "facultativo",
+      titulo: "6. Segurado Facultativo (Não Obrigatório)",
+      f: "Como ocorre a filiação do Segurado Facultativo? Ele pode pagar meses atrasados antes da inscrição?",
+      v: "Filiação só ocorre após <strong>inscrição + pagamento da 1ª parcela em dia</strong>.<span class='pegadinha'>⚡ Nunca pode pagar período anterior à primeira contribuição em dia.</span>"
+    },
+    {
