@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxo de Estudos — INSS Nível Médio</title>
+    <style>
+        :root {
+            --bg-cafe: #1c1613;
+            --card-verde: #1b3629;
+            --card-ativo: #244736;
+            --card-verso: #2e231d;
+            --creme: #f3ece4;
+            --caramelo: #d4a373;
+            --folha: #52b788;
+            --borda: #3d2f28;
+        }
+        * { box-sizing: border-box; }
+        body {
+            background: var(--bg-cafe);
+            color: var(--creme);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        header { text-align: center; margin-bottom: 20px; }
+        h1 { font-size: 1.4rem; margin: 0 0 8px 0; }
+        .aviso {
+            background: var(--card-verso);
+            border-left: 4px solid var(--folha);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #d6ccc2;
+        }
+        .grade {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+            max-width: 1120px;
+        }
+        .fileira {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .card {
+            perspective: 1000px;
+            flex: 1 1 0;
+            max-width: 260px;
+            min-width: 0;
+            height: 230px;
+            cursor: pointer;
+        }
+        .inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.virado .inner { transform: rotateY(180deg); }
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+        .capa {
+            background: var(--card-verde);
+            border: 2px solid #2d5a44;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+        .card.foco .capa {
+            background: var(--card-ativo);
+            border: 2px solid var(--folha);
+        }
+        .card.espera { opacity: 0.78; }
+        .card.espera:hover { opacity: 1; }
+        .tag {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--caramelo);
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 0.68rem;
+            font-weight: bold;
+        }
+        .capa h2 { font-size: 1.05rem; margin: 0; line-height: 1.25; }
+        .dica { font-size: 0.7rem; color: var(--caramelo); }
+        .verso {
+            background: var(--card-verso);
+            border: 2px solid var(--caramelo);
+            transform: rotateY(180deg);
+            justify-content: space-between;
+            text-align: left;
+        }
+        .verso h3 {
+            margin: 0 0 6px 0;
+            font-size: 0.82rem;
+            color: var(--caramelo);
+            border-bottom: 1px solid var(--borda);
+            padding-bottom: 4px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.76rem;
+            line-height: 1.35;
+            flex-grow: 1;
+        }
+        li { margin-bottom: 4px; padding-left: 10px; position: relative; }
+        li::before { content: "•"; color: var(--folha); position: absolute; left: 0; }
+        .voltar { font-size: 0.66rem; color: #a89f99; text-align: center; }
+        .seta { color: var(--caramelo); font-weight: bold; user-select: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fluxo Sequencial — INSS (Nível Médio)</h1>
+        <div class="aviso">
+            <strong>Regra de Foco:</strong> Clique no card para ver os tópicos. Só avance após concluir 100% da pasta.
+        </div>
+    </header>
+
+    <main class="grade">
+        <div class="fileira" id="linha1"></div>
+        <div class="fileira" id="linha2"></div>
+    </main>
+
+    <script>
+        const materias = [
+            { linha: "linha1", num: "PASTA 01 • EM FOCO", foco: true, nome: "Direito Previdenciário", topicos: ["Seguridade Social (Art. 194)", "Segurados e Dependentes", "Carência e Benefícios", "Custeio e Financiamento"] },
+            { linha: "linha1", num: "PASTA 02", foco: false, nome: "Noções de Direito Constitucional", topicos: ["Direitos e Garantias (Art. 5º)", "Direitos Sociais (Art. 6º-11)", "Nacionalidade e Políticos", "Administração Pública (Art. 37)"] },
+            { linha: "linha1", num: "PASTA 03", foco: false, nome: "Noções de Direito Administrativo", topicos: ["Princípios e Poderes", "Atos Administrativos", "Organização Administrativa", "Lei 8.112/90 (Servidores)"] },
+            { linha: "linha1", num: "PASTA 04", foco: false, nome: "Ética no Serviço Público", topicos: ["Código de Ética (Dec. 1.171/94)", "Deveres e Vedações", "Comissões de Ética", "Sistema de Gestão (Dec. 6.029)"] },
+            { linha: "linha2", num: "PASTA 05", foco: false, nome: "Língua Portuguesa", topicos: ["Interpretação de Texto", "Pontuação e Crase", "Concordância e Regência", "Classes e Tempos Verbais"] },
+            { linha: "linha2", num: "PASTA 06", foco: false, nome: "Raciocínio Lógico-Matemático", topicos: ["Proposições e Conectivos", "Tabela-Verdade e Negação", "Porcentagem e Regra de Três", "Conjuntos e Análise Comb."] },
+            { linha: "linha2", num: "PASTA 07", foco: false, nome: "Noções de Informática", topicos: ["Windows e Linux", "Word, Excel e LibreOffice", "Navegadores e Busca Web", "Segurança e Nuvem"] }
+        ];
+
+        materias.forEach((m, index) => {
+            const container = document.getElementById(m.linha);
+            if (container.children.length > 0) {
+                container.insertAdjacentHTML("beforeend", `<div class="seta">➔</div>`);
+            }
+            const listaHtml = m.topicos.map(t => `<li>${t}</li>`).join("");
+            container.insertAdjacentHTML("beforeend", `
+                <div class="card ${m.foco ? 'foco' : 'espera'}" onclick="this.classList.toggle('virado')">
+                    <div class="inner">
+                        <div class="face capa">
+                            <span class="tag">${m.num}</span>
+                            <h2>${m.nome}</h2>
+                            <span class="dica">↻ Ver tópicos</span>
+                        </div>
+                        <div class="face verso">
+                            <h3>Tópicos da Pasta</h3>
+                            <ul>${listaHtml}</ul>
+                            <div class="voltar">↻ Voltar</div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+    </script>
+
+</body>
+</html>
+
